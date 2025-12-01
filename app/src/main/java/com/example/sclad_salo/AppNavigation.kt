@@ -101,6 +101,11 @@ fun AppNavigation() {
                 },
                 onNavigateToLoginPage = {
                     navController.navigate(AppRoutes.LOGIN)
+                },
+
+
+                onNavigateToNofitications = {
+                    navController.navigate(AppRoutes.LOGIN)
                 }
 
 

@@ -71,18 +71,19 @@ class UnitRepository @Inject constructor() {
 
     //Добавить новый товар:
 
-    suspend fun addNewUnit(unitModel: UnitModel){
+    suspend fun addNewUnit(unitModel: UnitModel) {
 
         try {
             // .push() создает уникальный индетификатор .await() ожидает заверщения операции.
             databaseReferenceUnits.push().setValue(unitModel).await()
-        }catch (e: Exception) {
-            Log.e("UnitRepository","Failed to add new unot",e)
+        } catch (e: Exception) {
+            Log.e("UnitRepository", "Failed to add new unot", e)
 
             throw e // выдаем исключение чтобы сообщить ViewModel об ошибке добавления товара
             print(e.message.toString())
 
         }
+    }
 
         //Функция для загрузки изображения товара и получения его URL
 
@@ -99,14 +100,7 @@ class UnitRepository @Inject constructor() {
             //Получаем URL- адрес для загрузки изображения и дожидаемся его
             return uploadTask.storage.downloadUrl.await().toString()
 
-
-
-
-
         }
-
-
-    }
 
 
 }
