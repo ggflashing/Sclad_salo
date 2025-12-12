@@ -3,12 +3,13 @@ package com.example.sclad_salo.sign_up
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.semantics.Role
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.sclad_salo.repository.OperatorsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -42,12 +43,13 @@ data class RegistrationUiState(
 
 @HiltViewModel
 class RegistrationPageViewModel @Inject constructor(
+
     private val operatorsRepository: OperatorsRepository
 
 ): ViewModel() {
     //Сохраняет текущее состояние регистрации пользователя для интерфейса управляемое ViewModel
 
-    var uiState by mutableStateOf(value = RegistrationUiState)
+    var uiState by mutableStateOf(value = RegistrationUiState())
         private set // Пользовательский интерфейс может считывать это состояние но не может изменить
 
     // asSharedFlow() для отслеживания и отправки одноразовых событий
@@ -63,6 +65,73 @@ class RegistrationPageViewModel @Inject constructor(
         uiState = uiState.copy(name = newName)
 
     }
+
+    fun onEmailChange(newEmail: String) {
+        uiState = uiState.copy(email = newEmail)
+
+    }
+
+    fun onPassword(newPassword: String) {
+        uiState = uiState.copy(password = newPassword)
+
+    }
+
+    fun onRoleSelected(newRole: String) {
+        uiState = uiState.copy(selectedRole = newRole)
+
+    }
+
+//Основная функция логики регистрации
+
+
+    fun onRegisterClicked() {
+        //Базовая проверка
+
+        if (uiState.name.isBlank() || uiState.email.isBlank() || uiState.password.isBlank()) {
+            viewModelScope.launch {
+                _registrationResult.emit(RegistrationResult.Error("All fiewkd are required"))
+
+            }
+            return
+
+        }
+
+        viewModelScope.launch {
+            //Устанавливаем состояние загрузки на true
+
+            uiState = uiState.copy(isLoading = true)
+
+            try {
+                //Делегируем сложную логику регистрации в репозитторий
+                operatorsRepository.createNewOperator(
+                    name = uiState.name,
+                    email = uiState.email,
+                    password = uiState.password,
+                    role = uiState.selectedRole
+
+                )
+                //Дадим событие успеха если не было создана исключение
+                _registrationResult.emit(RegistrationResult.Success)
+            }catch (e: Exception){
+                //Выдаем событие ошибки с конктертным сообщением из исключения
+                _registrationResult.emit(
+                    RegistrationResult.Error(
+                        e.message?:"An uknown error occerred"
+
+                    )
+                )
+
+
+            }finally {
+                //Устанавливаем состояние загрузки обратно на false даже если загрузка удалась
+                uiState = uiState.copy(isLoading = false)
+            }
+
+
+        }
+
+    }
+
 
 
 

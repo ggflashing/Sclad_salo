@@ -44,7 +44,7 @@ fun DashboardPage_unit_create(
     val context = LocalContext.current
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia
+        contract = ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         imageUri = uri
 

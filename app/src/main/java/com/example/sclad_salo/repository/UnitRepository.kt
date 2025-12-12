@@ -71,7 +71,7 @@ class UnitRepository @Inject constructor() {
 
     //Добавить новый товар:
 
-    suspend fun addNewUnit(unitModel: UnitModel) {
+    suspend fun addNewUnit_rep(unitModel: UnitModel) {
 
         try {
             // .push() создает уникальный индетификатор .await() ожидает заверщения операции.

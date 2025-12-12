@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,11 +35,9 @@ class DashboardViewModel @Inject constructor(
     val uploadProgress: StateFlow<Float> = _uploadProgress.asStateFlow()
 
 
-
-
     private val _isUploading = MutableStateFlow(false)
 
-    val isUploading : StateFlow<Boolean> = _isUploading
+    val isUploading: StateFlow<Boolean> = _isUploading
 
     //Fix add the declaration for _uploadStatus
 
@@ -45,7 +45,7 @@ class DashboardViewModel @Inject constructor(
     val uploadStatus: StateFlow<String?> = _uploadStatus.asStateFlow()
 
 
-     fun addNewUnit(
+    fun addNewUnit(
         name: String,
         price: Double,
         count: Int,
@@ -53,62 +53,61 @@ class DashboardViewModel @Inject constructor(
         imageUri: Uri
 
 
-    ){
+    ) {
 
         viewModelScope.launch {
 
             val user = firebaseAuth.currentUser
-            if (user == null){
-                Log.e("DashboardViewModel","User is not authenticated")
+            if (user == null) {
+                Log.e("DashboardViewModel", "User is not authenticated")
                 _uploadStatus.value = "Error:User not logged in"
                 return@launch
 
 
             }
 
+
+
+
+            _isUploading.value = true
+            _uploadStatus.value = "Uploading image..."
+
+            try {
+                //2.Делегируем логику в репозиторий для загрузки изображений
+                val imageUrl = unitRepository.uploadUnitImage(imageUri, name)
+                _uploadStatus.value = "Image uploaded.Saving data.."
+
+                val unitModel = UnitModel(
+
+                    name = name,
+                    price = price,
+                    count = count,
+                    comment = comment,
+                    image = imageUrl
+                )
+
+                unitRepository.addNewUnit_rep(unitModel)
+                _uploadStatus.value = "Unit saved. Updating operator stats..."
+
+                operatorsRepository.incrementOperatorAddedProductCount(user.uid)
+                _uploadStatus.value = "Successfully added new unit!"
+
+
+            } catch (e: Exception) {
+                //обрабатываем ошибку
+                Log.e("DashboardViewModel", "Failed to add new unit", e)
+                _uploadStatus.value = "Error: ${e.message}"
+
+
+            } finally {
+                //снова делаем переменную isUploading false для нового состояния
+                _isUploading.value = false
+
+            }
+
         }
-
-
-        _isUploading.value = true
-        _uploadStatus.value = "Uploading image..."
-
-        try {
-            //2.Делегируем логику в репозиторий для загрузки изображений
-            val imageUrl = unitRepository.uploadUnitImage(imageUri,name)
-            _uploadStatus.value = "Image uploaded.Saving data.."
-
-            val unitModel = UnitModel(
-
-                name = name,
-                price = price,
-                count = count,
-                comment = comment,
-                image = imageUrl
-            )
-
-           unitRepository.addNewUnit(unitModel)
-            _uploadStatus.value = "Unit saved. Updating operator stats..."
-
-            operatorsRepository.incrementOperatorAddedProductCount(user.id)
-            _uploadStatus.value = "Successfully added new unit!"
-
-
-
-
-        }catch (e: Exception) {
-            //обрабатываем ошибку
-            Log.e("DashboardViewModel","Failed to add new unit",e)
-            _uploadStatus.value = "Error: ${e.message}"
-
-
-        }finally {
-            //снова делаем переменную isUploading false для нового состояния
-            _isUploading.value = false
-
-        }
-
-
     }
 
-
 }
+
+

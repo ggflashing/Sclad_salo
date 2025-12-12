@@ -98,7 +98,7 @@ fun LoginPage ( viewModel: LoginViewModel = hiltViewModel(),
                 onValueChange = viewModel::onEmailChange,//вызов ViewModel при изменении
                 label = {Text("Email")},
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardActions(KeyboardType.Email),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 singleLine = true
 
             )

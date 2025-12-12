@@ -21,6 +21,7 @@ okhttp = "4.12.0"
 coil = "2.6.0"
 mlkitTranslate = "17.0.2"
 firebaseAppcheckPlayintegrity = "19.0.1"
+roomKtx = "2.8.4"
 
 
 
@@ -69,6 +70,7 @@ coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 # ML Kit
 mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref = "mlkitTranslate" }
 firebase-appcheck-playintegrity = { group = "com.google.firebase", name = "firebase-appcheck-playintegrity", version.ref = "firebaseAppcheckPlayintegrity" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 
 
 
