@@ -1,16 +1,26 @@
+import java.io.FileInputStream
 import java.lang.module.ModuleFinder.compose
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
-
+    id("kotlin-parcelize")
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
 
 }
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+val geminiApiKey = localProperties.getProperty("GEMINI_API_KEY") ?: ""
+
 
 android {
     namespace = "com.example.sclad_salo"
@@ -20,6 +30,7 @@ android {
     }
 
     defaultConfig {
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
         applicationId = "com.example.sclad_salo"
         minSdk = 24
         targetSdk = 36
@@ -36,6 +47,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+
+            signingConfig = signingConfigs.getByName("debug")
+
         }
     }
 
@@ -50,7 +65,10 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
+
+
 
 
     composeOptions{
