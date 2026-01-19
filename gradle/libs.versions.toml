@@ -22,6 +22,7 @@ coil = "2.6.0"
 mlkitTranslate = "17.0.2"
 firebaseAppcheckPlayintegrity = "19.0.1"
 roomKtx = "2.8.4"
+runtime = "1.10.1"
 
 
 
@@ -71,6 +72,7 @@ coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref = "mlkitTranslate" }
 firebase-appcheck-playintegrity = { group = "com.google.firebase", name = "firebase-appcheck-playintegrity", version.ref = "firebaseAppcheckPlayintegrity" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
 
 
 

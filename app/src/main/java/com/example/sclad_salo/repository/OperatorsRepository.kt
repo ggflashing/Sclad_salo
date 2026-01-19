@@ -29,6 +29,7 @@ class OperatorsRepository @Inject constructor() {
 
     suspend fun createNewOperator(
 
+
         name: String,
         email: String,
         password: String,
@@ -55,15 +56,16 @@ class OperatorsRepository @Inject constructor() {
             // Генерируем random код 4-значный оператора
 
             val newOperator = Sclad_operator(
-
                 uid = userUid,
                 name_surname = name,
                 email = email,
                 password = password,
-                operation_code = operationCode,
+
+                operators_code = operationCode,
                 added_product = 0,
                 promoted_product = 0,
                 role = role
+
 
             )
 
