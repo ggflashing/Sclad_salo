@@ -12,6 +12,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
 
+
+
 }
 
 val localProperties = Properties()
@@ -110,6 +112,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
     implementation(libs.firebase.storage)
+    implementation("com.google.firebase:firebase-analytics")
 
 
 // Retrofit & OkHttp

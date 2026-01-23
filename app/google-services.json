@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "512679140673",
+    "project_id": "sclad-salo",
+    "storage_bucket": "sclad-salo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512679140673:android:2efe04aa6da753bee615c0",
+        "android_client_info": {
+          "package_name": "com.example.sclad_salo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMMTTAipuDp8qJSj4cEmv4kFpF_RDkdIY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
